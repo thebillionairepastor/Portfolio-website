@@ -3,3 +3,7 @@
 ### Screenshots :
 * ### The main page.
 ![](images/Portfolio-website.png)
+
+* ### Profile page.
+![](images/PROFILE-no-bg.png)
+PROFILE-no-bg.png
