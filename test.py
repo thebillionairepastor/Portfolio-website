@@ -1,44 +1,30 @@
 import requests
 from bs4 import BeautifulSoup
 import tkinter as tk
+from tkinter import filedialog
 
-# Create the GUI
+# Create a tkinter GUI to ask the user for the website URL
 root = tk.Tk()
-root.geometry("400x200")
+root.withdraw()
+url = filedialog.askstring(title="Enter Website URL", prompt="Enter the URL of the website to scrape:")
 
-# Create a function that retrieves data from a website
-def scrape_website():
-    # Get the URL from the user
-    url = url_entry.get()
+# Send a GET request to the URL and get the HTML content
+response = requests.get(url)
+html_content = response.content
 
-    # Use requests to get the HTML content of the page
-    response = requests.get(url)
-    content = response.content
+# Parse the HTML content with BeautifulSoup
+soup = BeautifulSoup(html_content, 'html.parser')
 
-    # Use BeautifulSoup to parse the HTML content
-    soup = BeautifulSoup(content, "html.parser")
+# Find the elements on the page that you want to scrape
+# For example, let's say you want to scrape all of the links on the page
+links = soup.find_all('a')
 
-    # Get the desired data from the page
-    data = soup.find("div", class_="my-data-class").text
+# Create a tkinter GUI to ask the user for the output file name and location
+root = tk.Tk()
+root.withdraw()
+file_path = filedialog.asksaveasfilename(defaultextension=".txt", title="Save As", filetypes=(("Text Files", "*.txt"),))
 
-    # Display the data in the GUI
-    result_label.config(text=data)
-
-# Add a label for the URL entry field
-url_label = tk.Label(root, text="Enter the URL:")
-url_label.pack()
-
-# Add an entry field for the URL
-url_entry = tk.Entry(root)
-url_entry.pack()
-
-# Add a button to start the scraping process
-scrape_button = tk.Button(root, text="Scrape Website", command=scrape_website)
-scrape_button.pack()
-
-# Add a label to display the result
-result_label = tk.Label(root)
-result_label.pack()
-
-# Start the GUI
-root.mainloop()
+# Write the scraped data to the output file
+with open(file_path, 'w') as f:
+    for link in links:
+        f.write(link.get('href') + '\n')
