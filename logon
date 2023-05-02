@@ -1,0 +1,29 @@
+<head>
+  <script src="https://connect.facebook.net/en_US/sdk.js"></script>
+  <script>
+    FB.init({
+      appId      : 'YOUR_APP_ID',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v12.0'
+    });
+    
+    function loginWithFacebook() {
+      FB.login(function(response) {
+        if (response.authResponse) {
+          console.log('Welcome! Fetching your information.... ');
+          FB.api('/me', function(response) {
+            console.log('Successful login for: ' + response.name);
+            // Store user info in database
+          });
+        } else {
+          console.log('User cancelled login or did not fully authorize.');
+        }
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <button onclick="loginWithFacebook()">Login with Facebook</button>
+</body>
